@@ -1,3 +1,5 @@
+// app/api/auth/[...nextauth]/route.js
+
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
@@ -17,11 +19,14 @@ export const authOptions = {
                 password: { label: "Password", type: "password" },
             },
             async authorize(credentials) {
-                if (!credentials.email || !credentials.password) {
+                if (!credentials?.email || !credentials?.password) {
                     throw new Error("Email and Password are required");
                 }
 
-                const user = await prisma.user.findUnique({ where: { email: credentials.email } });
+                const user = await prisma.user.findUnique({
+                    where: { email: credentials.email },
+                });
+
                 if (!user || !user.password) {
                     throw new Error("Invalid credentials");
                 }
@@ -40,10 +45,13 @@ export const authOptions = {
         }),
     ],
     callbacks: {
-        async session({ session }) {
-            const user = await prisma.user.findUnique({ where: { email: session.user.email } });
-            if (user) {
-                session.user.id = user.id;
+        async session({ session, user }) {
+            // Fetch user from the database using the email from the session object.
+            const dbUser = await prisma.user.findUnique({
+                where: { email: session.user.email },
+            });
+            if (dbUser) {
+                session.user.id = dbUser.id;
             }
             return session;
         },

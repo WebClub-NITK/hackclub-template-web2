@@ -1,6 +1,21 @@
+"use client"; // Ensures the component runs on the client-side
+
+import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation"; // For redirecting users
 
 export default function LandingPage() {
+  const { data: session } = useSession(); // Get session data
+  const router = useRouter();
+
+  const handleGetStarted = () => {
+    if (session) {
+      router.push("/dashboard"); // Redirect to dashboard if logged in
+    } else {
+      router.push("/auth/signin"); // Otherwise, redirect to login page
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-800 to-black text-white flex flex-col justify-center items-center">
       <header className="text-center mb-12">
@@ -13,19 +28,13 @@ export default function LandingPage() {
       </header>
 
       <div className="flex space-x-4">
-        <button className="bg-purple-700 hover:bg-purple-800 text-white font-bold py-3 px-8 rounded-full transition duration-300 ease-in-out transform hover:scale-105">
+        <button
+          onClick={handleGetStarted}
+          className="bg-purple-700 hover:bg-purple-800 text-white font-bold py-3 px-8 rounded-full transition duration-300 ease-in-out transform hover:scale-105"
+        >
           Get Started
         </button>
-        <Link href="/auth/signin">
-          <button className="bg-transparent border-2 border-purple-700 hover:bg-purple-700 hover:text-white text-purple-700 font-bold py-3 px-8 rounded-full transition duration-300 ease-in-out transform hover:scale-105">
-            Login
-          </button>
-        </Link>
-        <Link href="/auth/signup">
-          <button className="bg-transparent border-2 border-purple-700 hover:bg-purple-700 hover:text-white text-purple-700 font-bold py-3 px-8 rounded-full transition duration-300 ease-in-out transform hover:scale-105">
-            Sign Up
-          </button>
-        </Link>
+        
       </div>
     </div>
   );

@@ -19,9 +19,13 @@ const Login = () => {
         if (res?.error) {
             setError(res.error);
         } else {
-            // Redirect the user on successful login
-            window.location.href = "/dashboard"; // Or use `useRouter` from Next.js for routing
+            window.location.href = "/dashboard"; // Or use Next.js router
         }
+    };
+
+    // Corrected Google sign-in: remove redirect: false and use callbackUrl
+    const handleGoogleSignIn = () => {
+        signIn("google", { callbackUrl: "/dashboard" });
     };
 
     return (
@@ -29,7 +33,6 @@ const Login = () => {
             <div className="w-full max-w-md p-8 bg-gray-800 bg-opacity-90 rounded-lg shadow-lg">
                 <h2 className="text-3xl font-bold text-center text-white mb-6">Sign In</h2>
                 <form onSubmit={handleSubmit} className="space-y-6">
-                    {/* Email Input */}
                     <input
                         type="email"
                         value={email}
@@ -38,7 +41,6 @@ const Login = () => {
                         placeholder="Email"
                         required
                     />
-                    {/* Password Input */}
                     <input
                         type="password"
                         value={password}
@@ -47,7 +49,6 @@ const Login = () => {
                         placeholder="Password"
                         required
                     />
-                    {/* Submit Button */}
                     <button
                         type="submit"
                         className="w-full py-3 bg-purple-700 hover:bg-purple-800 rounded-lg text-white font-bold transition duration-300 ease-in-out transform hover:scale-105"
@@ -55,7 +56,12 @@ const Login = () => {
                         Login
                     </button>
                 </form>
-                {/* Error Message */}
+                <button
+                    onClick={handleGoogleSignIn}
+                    className="w-full py-3 mt-4 bg-red-600 hover:bg-red-700 rounded-lg text-white font-bold transition duration-300 ease-in-out transform hover:scale-105"
+                >
+                    Continue with Google
+                </button>
                 {error && <p className="mt-4 text-red-500 text-center">{error}</p>}
                 <div className="mt-4 text-center">
                     <p>
