@@ -1,5 +1,6 @@
 "use client";
 import { signIn } from "next-auth/react";
+import Image from "next/image";
 import { useState } from "react";
 
 const Login = () => {
@@ -57,10 +58,27 @@ const Login = () => {
                     </button>
                 </form>
                 <button
+                    type="button"
                     onClick={handleGoogleSignIn}
-                    className="w-full py-3 mt-4 bg-red-600 hover:bg-red-700 rounded-lg text-white font-bold transition duration-300 ease-in-out transform hover:scale-105"
+                    className="group relative flex items-center my-5 justify-center w-full py-3 px-4 border border-gray-300 rounded-md bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                 >
-                    Continue with Google
+                    {/* State overlay for visual feedback on hover, focus, or active */}
+                    <div className="absolute inset-0 opacity-0 transition-opacity duration-200 group-active:opacity-12 group-focus:opacity-12 group-hover:opacity-8"></div>
+
+                    {/* Google logo */}
+                    <img
+                        src="/images/g-logo.png"
+                        alt="Google logo"
+                        className="relative w-5 h-5 mr-3"
+                    />
+
+                    {/* Button text */}
+                    <span className="relative text-gray-700 font-medium text-md">
+                        Continue with Google
+                    </span>
+
+                    {/* Hidden text for screen readers (if needed) */}
+                    <span className="sr-only">Continue with Google</span>
                 </button>
                 {error && <p className="mt-4 text-red-500 text-center">{error}</p>}
                 <div className="mt-4 text-center">
